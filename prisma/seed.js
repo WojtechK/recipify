@@ -16,13 +16,13 @@ const USERS_MOCK = [
     profile_picture: "https://example.com/jane.jpg",
     bio: "Jane Doe's bio goes here.",
   },
-]
+];
 
 const load = async () => {
   try {
-      await prisma.user.createMany({
-        data: USERS_MOCK,
-      })
+    await prisma.user.createMany({
+      data: USERS_MOCK,
+    });
 
     console.log("Database seeded successfully.");
   } catch (error) {

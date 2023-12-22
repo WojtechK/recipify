@@ -22,7 +22,8 @@ export const SomeRandomSvgIcon = () => {
       stroke="none"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <path d="M0 0h24v24H0z" stroke="none" />
       <circle cx="12" cy="12" r="9" />
       <path d="M9 12l2 2l4-4" />
