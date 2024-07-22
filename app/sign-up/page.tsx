@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "../hooks/useAuth";
-
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -41,7 +40,7 @@ export default function SignUpForm() {
     resolver: zodResolver(formSchema),
   });
   const { signUp } = useAuth();
-const { toast } = useToast();
+  const { toast } = useToast();
 
   const onSubmit = async (data: SignUpFieldsType) => {
     try {
@@ -50,10 +49,9 @@ const { toast } = useToast();
 
       console.log(response);
       if (response.status === 200) {
-  
         toast({
           title: "User created successfully",
-          variant: "success"
+          variant: "success",
         });
       }
       setIsLoading(false);
@@ -61,7 +59,7 @@ const { toast } = useToast();
       console.log(error);
       toast({
         title: error.response.data.error,
-        variant: "destructive"
+        variant: "destructive",
       });
       setIsLoading(false);
     }

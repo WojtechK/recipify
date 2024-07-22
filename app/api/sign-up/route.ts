@@ -5,11 +5,17 @@ import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
+/**
+ * 1. Get the username, email and password from the request body
+ * 2. Check if the user exists
+ * 3. Hash the password
+ * 4. Create a new user
+ * 5. Return a success message
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { username, email, password } = body as SignUpFieldsType;
-    console.log(username, email, password);
 
     //check if this users already exists
     const user = await prisma.users.findUnique({
@@ -40,7 +46,7 @@ export async function POST(request: NextRequest) {
       { message: "User created successfully", success: true, data: newUser },
       { status: 200 },
     );
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
   }
 }
