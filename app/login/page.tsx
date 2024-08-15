@@ -17,6 +17,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../hooks/useAuth";
 import { useToast } from "@/components/ui/use-toast";
+import { WelcomeView } from "@/components/shared/WelcomeView";
+import { Logo } from "@/components/shared/Logo";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -61,11 +63,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <Card className="w-fit p-8 flex justify-center items-center">
+    <WelcomeView>
+      <Card className="w-fit p-8 flex justify-center items-center animate-fade-in select-none">
         <CardContent>
           <Form {...form}>
-            <h1 className="text-3xl text-center font-bold pb-8">Log In</h1>
+            <Logo />
+            <p className="text-center text-sm m-6">
+              Welcome back! Login to your account.
+            </p>
             <form
               className="flex flex-col space-y-8"
               onSubmit={form.handleSubmit(onSubmit)}
@@ -112,6 +117,6 @@ export default function LoginPage() {
           </Form>
         </CardContent>
       </Card>
-    </div>
+      </WelcomeView>
   );
 }
