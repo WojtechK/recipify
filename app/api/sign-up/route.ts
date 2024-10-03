@@ -42,8 +42,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    const responseUser = {
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+    };
+
     return NextResponse.json(
-      { message: "User created successfully", success: true, data: newUser },
+      { message: "User created successfully", success: true, data: responseUser },
       { status: 200 },
     );
   } catch (error) {

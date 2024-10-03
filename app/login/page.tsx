@@ -19,6 +19,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { WelcomeView } from "@/components/shared/WelcomeView";
 import { Logo } from "@/components/shared/Logo";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -38,6 +39,8 @@ export default function LoginPage() {
     resolver: zodResolver(formSchema),
   });
 
+  const router = useRouter();
+
   const { toast } = useToast();
   const { login } = useAuth();
 
@@ -45,12 +48,15 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       const response = await login(data);
+      //read response cookie
       console.log(response);
-      if (response.status === 200) {
+    if (response.status === 200) {
         toast({
           title: "Logged in successfully",
           variant: "success",
         });
+
+        router.push("/home");
       }
     } catch (error: any) {
       console.log(error);

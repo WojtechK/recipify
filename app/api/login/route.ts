@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -39,7 +39,6 @@ export async function POST(request: NextRequest) {
         { status: 401 },
       );
     }
-
     // after we verified the user is valid, we can create a JWT token and return it to the user cookies
     // first create token data
     const tokenData = {
@@ -47,21 +46,28 @@ export async function POST(request: NextRequest) {
       username: user.username,
       email: user.email,
     };
-    const jwtToken = jwt.sign(tokenData, String(process.env.JWT_SECRET), {
-      expiresIn: "1h",
-    });
 
-    // create a next response
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET); // The secret needs to be encoded
+
+    const jwtToken = await new SignJWT(tokenData)
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("1h")
+      .sign(secret);
+
     const response = NextResponse.json({
       message: "Logged in successfully",
       success: true,
       data: user,
     });
-    // set this token in the user cookies
-    response.cookies.set("token", jwtToken, { httpOnly: true });
-    
-    return response;
+    response.cookies.set("token", jwtToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Secure only in production
+      sameSite: "lax", // Lax is usually a good option to ensure the cookie is sent with same-site requests
+      path: "/", // Ensure the cookie is available across your site
+    });
 
+    return response;
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
