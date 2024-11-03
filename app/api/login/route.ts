@@ -60,12 +60,14 @@ export async function POST(request: NextRequest) {
       success: true,
       data: user,
     });
-    response.cookies.set("token", jwtToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Secure only in production
-      sameSite: "lax", // Lax is usually a good option to ensure the cookie is sent with same-site requests
-      path: "/", // Ensure the cookie is available across your site
-    });
+    const isProduction = process.env.NODE_ENV === "production";
+
+response.cookies.set("token", jwtToken, {
+  httpOnly: true,
+  secure: isProduction, // Ensure secure is false in development
+  sameSite: "lax",
+  path: "/",
+});
 
     return response;
   } catch (error) {

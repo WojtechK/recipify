@@ -7,8 +7,10 @@ export const useAuth = () => {
   };
 
   const login = async <T>(formData: T): Promise<AxiosResponse> => {
-    return await axios.post("/api/login", formData);
-  }
+    return await axios.post("/api/login", formData, {
+      withCredentials: true,
+    });
+  };
 
   return {
     signUp,
