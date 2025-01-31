@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function GET() {
-  const users = await prisma.users.findMany();
+  const rawUsers = await prisma.users.findMany();
+  const users = rawUsers.map(({ password_hash, ...rest }) => rest);
   return NextResponse.json(users);
 }
