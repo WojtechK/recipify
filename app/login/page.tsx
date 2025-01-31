@@ -48,9 +48,8 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       const response = await login(data);
-      //read response cookie
-      console.log(response);
-    if (response.status === 200) {
+
+      if (response.status === 200) {
         toast({
           title: "Logged in successfully",
           variant: "success",
@@ -60,10 +59,17 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       console.log(error);
-      toast({
-        title: error.response.data.error,
-        variant: "destructive",
-      });
+      if (error.response?.status === 500) {
+        toast({
+          title: "Internal server error",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: error.response?.data?.error ?? "An error occurred",
+          variant: "destructive",
+        });
+      }
     }
     setIsLoading(false);
   };
@@ -123,6 +129,6 @@ export default function LoginPage() {
           </Form>
         </CardContent>
       </Card>
-      </WelcomeView>
+    </WelcomeView>
   );
 }

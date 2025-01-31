@@ -1,32 +1,38 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useUsers } from "../hooks/useUsers";
+import { RecipeDialog } from "@/components/RecipeDialog";
 import { PrismaClient } from "@prisma/client";
+import { ModeToggle } from "@/components/ModeToggle";
+import { Textarea } from "@/components/ui/textarea";
 
 
 
 export async function Home() {
 
-    // load users from API 
-    // display users in a list
-
-
-
     const prisma = new PrismaClient();
-        // fetch users in React server component without using any Hooks and useEffect
+    //     // fetch users in React server component without using any Hooks and useEffect
         const users = await prisma.users.findMany();
 
-        //console.log(users);
 
     return(
-        <div className="w-full h-screen bg-primary">
-            test
-            {/* <h1>{users.map(user => (
-                <div key={user.id}>
-                    <h1>{user.name}</h1>
-                    <h2>{user.email}</h2>
-                </div>
-            ))}</h1> */}
-        </div>
+        <main className="w-full h-screen bg-background flex justify-center p-6">
+            <header className="flex justify-between w-full h-24">
+               
+                    <div></div>
+                    <div className="min-w-[360px]">
+                        <RecipeDialog />
+                    </div>
+                    <div>
+                        <ModeToggle />
+                    </div>
+            
+            
+            </header>
+            
+            
+            {/* <RecipesList /> */}
+          
+        </main>
     )
     }
 
