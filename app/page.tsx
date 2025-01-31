@@ -1,5 +1,5 @@
 import Image from "next/image";
 
 export default function Landing() {
-  return <h1>Recipify</h1>;
+  return <h1>Recipify landing page</h1>;
 }
