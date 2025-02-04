@@ -7,8 +7,13 @@ import { useTheme } from "next-themes";
 //TODO - Fix hydration issue
 export function ModeToggle() {
   const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-  if (!theme) return null;
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const isDark = theme === "dark";
   return (
