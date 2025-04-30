@@ -20,6 +20,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "../hooks/useAuth";
 import { WelcomeView } from "@/components/shared/WelcomeView";
 import { Logo } from "@/components/shared/Logo";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -37,6 +39,7 @@ export type SignUpFieldsType = z.infer<typeof formSchema>;
 
 export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<SignUpFieldsType>({
     resolver: zodResolver(formSchema),
@@ -55,6 +58,7 @@ export default function SignUpForm() {
           title: "User created successfully",
           variant: "success",
         });
+        router.push("/login");
       }
       setIsLoading(false);
     } catch (error: any) {
@@ -133,10 +137,17 @@ export default function SignUpForm() {
               />
 
               <Button isLoading={isLoading} type="submit">
-                SignUp
+                Create Account
               </Button>
             </form>
           </Form>
+          <div className="mt-6" >
+          <Link href="/login">
+            <Button variant="link">Already have an account? Log in
+            </Button>
+          </Link>
+          </div>
+
         </CardContent>
       </Card>
       </WelcomeView>

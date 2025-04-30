@@ -7,10 +7,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { IRecipe } from "@/types/recipe";
+import { IRecipe, IRecipeDifficulties } from "@/app/types/recipe";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { title } from "process";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRecipe } from "@/app/hooks/useRecipe";
+
+const difficultyOptions: readonly [IRecipeDifficulties, ...IRecipeDifficulties[]]
+ = ["easy", "medium", "hard", "pro"];
 
 const formSchema = z.object({
   title: z.string().nonempty().min(3, {
@@ -47,7 +51,7 @@ const formSchema = z.object({
   time: z.number().int().positive({
     message: "Time must be a positive integer.",
   }),
-  difficulty: z.enum(["easy", "medium", "hard", "pro"]),
+  difficulty: z.enum(difficultyOptions),
 });
 
 export type RecipeFieldsType = z.infer<typeof formSchema>;
@@ -57,13 +61,25 @@ export function RecipeForm() {
     resolver: zodResolver(formSchema),
   });
 
+  const { submitNewRecipe } = useRecipe();
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "ingredients",
   });
 
-  const onSubmit = async (data: RecipeFieldsType) => {
+  const onSubmit: SubmitHandler<IRecipe> = async (
+    data
+  ) => {
     console.log(data);
+    try {
+      const response = await submitNewRecipe(data);
+      console.log(response);
+    }
+    catch (error) {
+      console.error(error);
+    }
+    
   };
 
   return (
@@ -169,7 +185,10 @@ export function RecipeForm() {
                   recipe.
                 </FormDescription>
                 <FormControl>
-                  <Input {...field} id="time" type="number" />
+                  <Input {...field} onChange={
+                    (e) => field.onChange(parseInt(e.target.value))
+
+                  } id="time" type="number" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -185,15 +204,16 @@ export function RecipeForm() {
                   Choose the difficulty level of the recipe.
                 </FormDescription>
                 <FormControl>
-                  <Select {...field}>
+                  <Select {...field} onValueChange={(value) => field.onChange(value)}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="difficulty" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="easy">Easy</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="hard">Hard</SelectItem>
-                      <SelectItem value="pro">Pro</SelectItem>
+                      {difficultyOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>

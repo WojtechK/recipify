@@ -12,11 +12,14 @@ export async function Home() {
 
   return (
     <div className="w-full h-screen bg-background flex justify-center p-6">
-      <header className="flex items-center justify-between w-full h-24">
+      <header className="flex items-center justify-center relative w-full h-24">
         <div className="min-w-[360px]">
           <RecipeDialog />
         </div>
-        <ModeToggle />                                                                    
+        <div className="absolute right-0 top-0 p-4">
+        <ModeToggle />  
+        </div>
+                                                                          
       </header>
       <main>
 {/* <RecipesList /> */}

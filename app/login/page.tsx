@@ -20,6 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { WelcomeView } from "@/components/shared/WelcomeView";
 import { Logo } from "@/components/shared/Logo";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -83,6 +84,9 @@ export default function LoginPage() {
             <p className="text-center text-sm m-6">
               Welcome back! Login to your account.
             </p>
+            <p className="text-center text-green-500 text-sm m-6">
+              Account created successfully! Please log in.
+            </p>
             <form
               className="flex flex-col space-y-8"
               onSubmit={form.handleSubmit(onSubmit)}
@@ -127,6 +131,12 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
+          <div className="mt-6" >
+          <Link href="/sign-up">
+            <Button variant="link">Don't have an account? Sign up</Button>
+          </Link>
+          </div>
+         
         </CardContent>
       </Card>
     </WelcomeView>

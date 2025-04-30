@@ -9,26 +9,26 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model users {
+model Users {
     id              Int      @id @default(autoincrement())
     username        String   @unique
     email           String   @unique
     password_hash        String
     createdAt       DateTime @default(now())
     updatedAt       DateTime @updatedAt
-    recipes         recipes[]
+    recipes         Recipes[]
 }
 
-model recipes {
+model Recipes {
   id           Int      @id @default(autoincrement())
   title        String
   description  String
-  ingredients  String[]
+  ingredients  Json[]  // Store ingredients as a JSON array
   instructions String
   time         Int
   difficulty   String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  author       users?   @relation(fields: [authorId], references: [id])
+  author       Users?   @relation(fields: [authorId], references: [id])
   authorId     Int?
 }

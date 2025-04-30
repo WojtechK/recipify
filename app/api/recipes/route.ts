@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from "@prisma/client";
-import { IRecipe } from '@/types/recipe';
+import { IRecipe } from '@/app/types/recipe';
 
 const prisma = new PrismaClient();
 
@@ -11,6 +11,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
+    console.log(request);
+    console.log('BODY', body)
+
     const recipeData: IRecipe = {
         title: body.title,
         description: body.description,
@@ -21,9 +24,9 @@ export async function POST(request: NextRequest) {
         authorId: body.authorId
     }
     const recipe = await prisma.recipes.create({
-        data: recipeData,
+        data: recipeData
     });
-    return NextResponse.json(recipe);
+    return NextResponse.json(recipeData);
 };
 
 
